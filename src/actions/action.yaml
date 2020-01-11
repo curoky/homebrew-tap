@@ -1,0 +1,94 @@
+name: 'brew tap install and test'
+description: 'setup homebrew and test formula.'
+author: 'curoky'
+branding:
+  icon: 'box'
+  color: 'gray-dark'
+inputs:
+  formula:
+    description: formula
+    required: true
+  install_args:
+    description: 'args for brew install'
+    required: false
+    default: ''
+  update_brew:
+    description: 'run brew update'
+    required: false
+    default: ''
+  run_test:
+    description: 'run test after install'
+    required: false
+    default: 'true'
+  test_args:
+    description: 'args for brew test'
+    required: false
+    default: ''
+  env:
+    description: 'env'
+    required: false
+    default: ''
+  upload_filepath:
+    description: ''
+    required: false
+    default: ''
+  upload_filename:
+    description: ''
+    required: false
+    default: ''
+  ggg:
+    description: ''
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: setup env
+      shell: bash
+      run: |
+        echo "HOMEBREW_NO_ANALYTICS=1" >> $GITHUB_ENV
+        echo "HOMEBREW_NO_AUTO_UPDATE=1" >> $GITHUB_ENV
+        if [[ "${{ inputs.env }}" != "" ]]; then
+          echo "${{ inputs.env }}" >> $GITHUB_ENV
+        fi
+
+    - name: update brew
+      shell: bash
+      run: |
+        if [[ "${{ inputs.update_brew }}" == "true" ]]; then
+          brew update
+        fi
+
+    - name: setup user tap
+      shell: bash
+      run: |
+        mkdir -p $(brew --repo)/Library/Taps/curoky
+        cp -r $PWD $(brew --repo)/Library/Taps/curoky/homebrew-custom
+
+    - name: install formula
+      shell: bash
+      run: brew install ${{ inputs.install_args }} curoky/custom/${{ inputs.formula }}
+
+    - name: test formula
+      shell: bash
+      run: |
+        if [[ "${{ inputs.run_test }}" == "true" ]]; then
+          if ! brew test ${{ inputs.test_args }} curoky/custom/${{ inputs.formula }}; then
+            echo "try reinstall and retest"
+            brew remove curoky/custom/${{ inputs.formula }}
+            brew install ${{ inputs.install_args }} curoky/custom/${{ inputs.formula }}
+            brew test ${{ inputs.test_args }} curoky/custom/${{ inputs.formula }}
+          fi
+        fi
+
+    - name: update binary to release
+      shell: bash
+      run: |
+        if [[ "${{ inputs.ggg }}" != "" ]]; then
+          brew install gh
+          echo ${{ inputs.ggg }} | gh auth login --with-token
+          cp ${{ inputs.upload_filepath }} ./${{ inputs.upload_filename }}
+          gh release upload binary ./${{ inputs.upload_filename }} --repo curoky/homebrew-tap --clobber
+          echo y | gh auth logout --hostname github.com || echo "logout failed!"
+        fi
