@@ -19,6 +19,7 @@ jobs:
         package:
           - bazel-compilation-database
           - bazel@3
+          - cmake-format
           - cpplint
           - gost
           - hexo
