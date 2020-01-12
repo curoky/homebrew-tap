@@ -32,6 +32,7 @@ jobs:
           # - python@2_osx      # Note: ImportError: No module named _tkinter
           - spaceship-prompt
           # - thrift@0.9.3      # Note: Error: libcrypto required.
+          - zsh-blade
 
     runs-on: ${{ matrix.os }}
 
