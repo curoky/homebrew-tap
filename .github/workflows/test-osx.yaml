@@ -1,0 +1,40 @@
+name: test on osx
+on:
+  push:
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      max-parallel: 100
+      matrix:
+        os: [macos-latest]
+        package:
+          - bazel-compilation-database
+          - bazel@3
+          - cpplint
+          - gost
+          - hexo
+          - include-what-you-use@15
+          - libevent-openssl1.0
+          - llvm@11
+          - openssl@1.0.2t
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+      HOMEBREW_NO_ANALYTICS: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: unlink preinstall nodejs
+        run: brew unlink node@12
+
+      - name: remove openssl@1.0.2t in local tap
+        run: rm -rf $(brew --repo)/Library/Taps/local
+
+      - uses: curoky/actions/brew-tap-install-test@master
+        with:
+          formula: ${{ matrix.package }}
