@@ -12,23 +12,28 @@ class LibeventOpenssl10 < Formula
     regex(/libevent[._-]v?(\d+(?:\.\d+)+)-stable/i)
   end
 
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
-  depends_on "libtool" => :build
-  depends_on "pkg-config" => :build
-  depends_on "openssl@1.0.2u"
-  depends_on "gcc@10"
+  depends_on 'cmake' => :build
+  depends_on 'ninja' => :build
+  depends_on 'openssl@1.0.2t'
+  depends_on 'gcc@11' => :build
 
   def install
-    ENV["CC"] = Formula["gcc@10"].opt_bin/"gcc-10"
-    ENV["CXX"] = Formula["gcc@10"].opt_bin/"g++-10"
+    args = std_cmake_args + %W[
+      -GNinja
+      --log-level=STATUS
+      -DEVENT__DISABLE_BENCHMARK=OFF
+      -DEVENT__DISABLE_TESTS=OFF
+      -DEVENT__DISABLE_REGRESS=OFF
+      -DEVENT__DISABLE_SAMPLES=OFF
+      -DOPENSSL_ROOT_DIR=#{Formula['openssl@1.0.2t'].prefix}
+      -DCMAKE_PREFIX_PATH=#{Formula['openssl@1.0.2t'].prefix}
+    ]
 
-    system "./autogen.sh"
-    system "./configure", "--disable-dependency-tracking",
-                          "--disable-debug-mode",
-                          "--prefix=#{prefix}"
-    system "make"
-    system "make", "install"
+    mkdir 'build' do
+      system 'cmake', *args, '..'
+      system 'ninja'
+      system 'ninja', 'install'
+    end
   end
 
   test do
