@@ -10,16 +10,23 @@ jobs:
       matrix:
         os: [macos-latest]
         package:
-          - bazel-compilation-database
+          # ls Formula | xargs -n 1 | sed -e 's/.rb/ /' -e 's/^/          - /'
           - bazel@3
-          - cmake-format
+          # - bazel-buildtools  # Note: linux only
+          - bazel-compilation-database
+          # - cmake-format      # Note: not completed
           - cpplint
           - gost
           - hexo
           - include-what-you-use@15
           - libevent-openssl1.0
           - llvm@11
+          # - miniconda         # Note: linux only, osx has cask one
+          # - ncurses@5         # Note: linux only
           - openssl@1.0.2t
+          # - openssl@1.0.2u    # Note: linux only
+          # - oracle-jdk        # Note: linux only, osx has cask one
+          # - thrift@0.9.3      # Note: Error: libcrypto required.
 
     runs-on: ${{ matrix.os }}
 

@@ -10,10 +10,11 @@ jobs:
       matrix:
         os: [ubuntu16.04, ubuntu18.04, ubuntu20.04]
         package:
+          # ls Formula | xargs -n 1 | sed -e 's/.rb/ /' -e 's/^/          - /'
+          - bazel@3
           - bazel-buildtools
           - bazel-compilation-database
-          - bazel@3
-          - cmake-format
+          # - cmake-format NOTE: not completed
           - cpplint
           - gost
           - hexo
@@ -25,6 +26,7 @@ jobs:
           - openssl@1.0.2t
           - openssl@1.0.2u
           - oracle-jdk
+          - thrift@0.9.3
 
     runs-on: ubuntu-latest
 
