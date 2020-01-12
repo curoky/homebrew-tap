@@ -1,10 +1,10 @@
-# My homebrew formula
+# Curoky Homebrew Tap
 
 ## How do I install these formulae?
 
-`brew install curoky/curoky/<formula>`
+`brew install curoky/tap/<formula>`
 
-Or `brew tap curoky/curoky` and then `brew install <formula>`.
+Or `brew tap curoky/tap` and then `brew install <formula>`.
 
 ## Documentation
 
