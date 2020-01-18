@@ -29,6 +29,7 @@ jobs:
           - oracle-jdk
           - python@2_linux
           # - python@2_osx        # Note: osx only
+          - spaceship-prompt
           - thrift@0.9.3
           - zsh-blade
 
