@@ -25,6 +25,7 @@ jobs:
           - llvm@11
           - miniconda
           - ncurses@5
+          - oh-my-zsh
           - openssl@1.0.2t
           - openssl@1.0.2u
           - oracle-jdk
