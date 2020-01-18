@@ -23,6 +23,7 @@ jobs:
           - bazel-compilation-database
           # - cmake-format      # Note: not completed
           - cpplint
+          - git-mv-with-history
           - gost
           - hexo
           - include-what-you-use@15
