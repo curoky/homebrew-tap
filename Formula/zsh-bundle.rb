@@ -24,6 +24,7 @@ class ZshBundle < Formula
 
   keg_only :versioned_formula
   bottle :unneeded
+  depends_on "zsh"
 
   def install
     prefix.install Dir["*"]
@@ -33,7 +34,7 @@ class ZshBundle < Formula
     (prefix/"custom/plugins/zsh-syntax-highlighting").install resource("zsh-syntax-highlighting")
     (prefix/"custom/plugins/zsh-blade").install resource("zsh-blade")
 
-    ln_sf "#{prefix}/custom/themes/spaceship-prompt/spaceship.zsh", "#{prefix}/custom/themes/spaceship.zsh-theme"
+    ln_sf "#{prefix}/custom/themes/spaceship-prompt/spaceship.zsh-theme", "#{prefix}/custom/themes/spaceship.zsh-theme"
   end
 
   test do
