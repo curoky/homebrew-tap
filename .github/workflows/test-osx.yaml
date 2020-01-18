@@ -25,14 +25,13 @@ jobs:
           - llvm@11
           # - miniconda         # Note: linux only, osx has cask one
           # - ncurses@5         # Note: linux only
-          - oh-my-zsh
           - openssl@1.0.2t
           # - openssl@1.0.2u    # Note: linux only
           # - oracle-jdk        # Note: linux only, osx has cask one
           # - python@2_linux    # Note: linux only
           - spaceship-prompt
           # - thrift@0.9.3      # Note: Error: libcrypto required.
-          - zsh-blade
+          - zsh-bundle
 
     runs-on: ${{ matrix.os }}
 
