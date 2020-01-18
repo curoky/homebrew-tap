@@ -31,6 +31,7 @@ jobs:
           # - python@2_linux    # Note: linux only
           - spaceship-prompt
           # - thrift@0.9.3      # Note: Error: libcrypto required.
+          - vim-bundle
           - zsh-bundle
 
     runs-on: ${{ matrix.os }}
