@@ -31,6 +31,7 @@ jobs:
           - python@2_linux
           # - python@2_osx        # Note: osx only
           - thrift@0.9.3
+          - typora-bundle
           - vim-bundle
           - zsh-bundle
 
