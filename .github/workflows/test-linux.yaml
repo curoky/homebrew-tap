@@ -23,15 +23,13 @@ jobs:
           - llvm@11
           - miniconda
           - ncurses@5
-          - oh-my-zsh
           - openssl@1.0.2t
           - openssl@1.0.2u
           - oracle-jdk
           - python@2_linux
           # - python@2_osx        # Note: osx only
-          - spaceship-prompt
           - thrift@0.9.3
-          - zsh-blade
+          - zsh-bundle
 
     runs-on: ubuntu-latest
 
