@@ -17,6 +17,7 @@ jobs:
           # - cmake-format      # Note: not completed
           - cpplint
           - git-mv-with-history
+          - gnu-sed@4.5
           - hexo
           - include-what-you-use@15
           - libevent-openssl1.0
