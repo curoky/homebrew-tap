@@ -29,6 +29,7 @@ jobs:
           # - python@2_linux    # Note: linux only
           - spaceship-prompt
           # - thrift@0.9.3      # Note: Error: libcrypto required.
+          - typora-bundle
           - vim-bundle
           - zsh-bundle
 
