@@ -19,6 +19,7 @@ jobs:
           # - cmake-format      # Note: not completed
           - cpplint
           - git-mv-with-history
+          # - glibc2.32         # Note: linux only
           - gnu-sed@4.5
           - hexo
           - include-what-you-use@15
