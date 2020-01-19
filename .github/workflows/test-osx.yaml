@@ -27,6 +27,7 @@ jobs:
           - llvm@11
           # - miniconda         # Note: linux only, osx has cask one
           # - ncurses@5         # Note: linux only
+          # - ncurses-termlib   # Note: linux only
           - openssl@1.0.2t
           # - openssl@1.0.2u    # Note: linux only
           # - oracle-jdk        # Note: linux only, osx has cask one
@@ -46,6 +47,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: upgrade homebrew
+        run: brew update && brew upgrade
 
       - name: unlink preinstall nodejs
         run: brew unlink node@12
