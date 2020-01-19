@@ -37,6 +37,7 @@ jobs:
           - oracle-jdk
           - python@2_linux
           # - python@2_osx        # Note: osx only
+          - qt@5.13.2
           - thrift@0.9.3
           - typora-bundle
           - vim-bundle
