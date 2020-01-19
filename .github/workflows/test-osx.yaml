@@ -74,3 +74,20 @@ jobs:
       - uses: curoky/actions/brew-tap-install-test@master
         with:
           formula: ${{ matrix.package }}
+
+  install_cask:
+    runs-on: macos-latest
+    env:
+      HOMEBREW_NO_ANALYTICS: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: link tap
+        run: |
+          mkdir -p $(brew --repo)/Library/Taps/curoky
+          cp -r $PWD $(brew --repo)/Library/Taps/curoky/homebrew-custom
+
+      - name: install cask
+        run: brew cask install freefilesync
