@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       max-parallel: 100
       matrix:
-        os: [ubuntu16.04, ubuntu18.04, ubuntu20.04]
+        os: [ubuntu16.04, ubuntu20.04] # ubuntu18.04,
         package:
           # ls Formula | xargs -n 1 | sed -e 's/.rb/ /' -e 's/^/          - /'
           - bazel@3
@@ -32,6 +32,7 @@ jobs:
           - llvm@11
           - miniconda
           - ncurses@5
+          - ncurses-termlib
           - openssl@1.0.2t
           - openssl@1.0.2u
           - oracle-jdk
@@ -53,6 +54,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: upgrade homebrew
+        run: brew update && brew upgrade
+
       - uses: curoky/actions/brew-tap-install-test@master
         with:
           formula: ${{ matrix.package }}
