@@ -1,9 +1,9 @@
 cask 'freefilesync' do
-  version '11.2'
-  sha256 '3f0025823bb5f414c2ed614668eeaf38beec2fc7b6ecb47df5be239de5195135'
+  version '11.5'
 
-  url "https://github.com/curoky/FreeFileSync-Archive/raw/master/FreeFileSync_#{version}_macOS.pkg"
   name 'FreeFileSync'
+  url "https://dl.bintray.com/curoky/homebrew-cask/FreeFileSync_#{version}_macOS.pkg"
+  sha256 "068a793d128b8e7e4dc42f94753bbe67acd6a727850d0afd7d466db85c9564be"
   homepage 'https://www.freefilesync.org/'
 
   pkg "FreeFileSync_#{version}_macOS.pkg"
