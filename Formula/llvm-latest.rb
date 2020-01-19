@@ -1,8 +1,8 @@
-class LlvmAT11 < Formula
+class LlvmLatest < Formula
   desc "Next-gen compiler infrastructure"
   homepage "https://llvm.org/"
   license "Apache-2.0"
-  version "11"
+  version "latest"
 
   if OS.mac?
     url "https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-apple-darwin.tar.xz"
@@ -15,11 +15,39 @@ class LlvmAT11 < Formula
   keg_only :versioned_formula
 
   unless OS.mac?
-    depends_on "ncurses"
+    depends_on "patchelf" => :build
+    depends_on "zlib"
+    depends_on "gcc"
+    depends_on "glibc2.32"
+    depends_on "ncurses-termlib"
+    depends_on "libedit"
+    depends_on "libxml2"
   end
 
   def install
     system "cp", "-r", "#{buildpath}/.", "#{prefix}/"
+  end
+
+  def post_install
+    unless OS.mac?
+      @target_bins = ["clang-11", "clangd", "clang-format"]
+
+      @rpath = [
+        lib,
+        Formula["zlib"].lib,
+        Formula["gcc"].lib/"gcc/10",
+        Formula["glibc2.32"].lib,
+        Formula["ncurses-termlib"].lib,
+        Formula["libedit"].lib,
+        Formula["libxml2"].lib,
+      ].join(":")
+
+      @target_bins.each { |target|
+        system "chmod", "+w", "#{bin}/#{target}"
+        system "patchelf", "--set-interpreter", Formula["glibc2.32"].lib/"ld-linux-x86-64.so.2", "#{bin}/#{target}"
+        system "patchelf", "--set-rpath", @rpath, "#{bin}/#{target}"
+      }
+    end
   end
 
   def caveats

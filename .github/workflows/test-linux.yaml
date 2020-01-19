@@ -22,7 +22,7 @@ jobs:
           - hexo
           - include-what-you-use@15
           - libevent-openssl1.0
-          - llvm@11
+          - llvm-latest
           - miniconda
           - ncurses@5
           - ncurses-termlib
