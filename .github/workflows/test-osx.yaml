@@ -11,7 +11,7 @@ jobs:
         os: [macos-latest]
         package:
           # ls Formula | xargs -n 1 | sed -e 's/.rb/ /' -e 's/^/          - /'
-          - bazel@3
+          # - bazel@3           # Note: linux only
           # - bazel-buildtools  # Note: linux only
           - bazel-compilation-database
           # - cmake-format      # Note: not completed
