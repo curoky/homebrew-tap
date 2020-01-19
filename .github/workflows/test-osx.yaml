@@ -25,7 +25,6 @@ jobs:
           - cpplint
           - git-mv-with-history
           # - glibc2.32         # Note: linux only
-          - gnu-sed@4.5
           - hexo
           - include-what-you-use@15
           - libevent-openssl1.0
@@ -54,7 +53,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: upgrade homebrew
-        run: brew update && brew upgrade
+        run: brew update && brew upgrade || echo "ignore failed"
 
       - name: unlink preinstall nodejs
         run: brew unlink node@12
