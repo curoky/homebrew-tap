@@ -47,6 +47,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: homebrew cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/Homebrew
+          key: ${{ matrix.package }}-${{ hashFiles(format('Formula/{0}.rb', matrix.package)) }}
+          restore-keys: |
+            ${{ matrix.package }}-
+
+      - name: check cache
+        run: |
+          mkdir -p ~/.cache/Homebrew || echo "ignore exits"
+          ls -la $(brew --cache)
+
       - name: upgrade homebrew
         run: brew update && brew upgrade || echo "ignore failed"
 
