@@ -25,7 +25,7 @@ class QtAT5132 < Formula
     depends_on "icu4c"
     depends_on "libproxy"
     depends_on "pulseaudio"
-    depends_on "python@2_linux"
+    depends_on "python@2"
     depends_on "sqlite"
     depends_on "systemd"
     depends_on "libxkbcommon"

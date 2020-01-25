@@ -35,10 +35,8 @@ jobs:
           - openssl@1.0.2t
           # - openssl@1.0.2u    # Note: linux only
           # - oracle-jdk        # Note: linux only, osx has cask one
-          # - python@2_linux    # Note: linux only
-          # - python@2_osx      # Note: ImportError: No module named _tkinter
-          - spaceship-prompt
-          - qt@5.13.2           # Note: linux only
+          - python@2
+          # - qt@5.13.2         # Note: linux only
           # - thrift@0.9.3      # Note: Error: libcrypto required.
           - typora-bundle
           - vim-bundle
