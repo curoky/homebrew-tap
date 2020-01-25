@@ -21,6 +21,9 @@ class ZshBundle < Formula
   resource "zsh-blade" do
     url "https://github.com/curoky/zsh-blade/archive/master.zip"
   end
+  resource "conda-zsh-completion" do
+    url "https://github.com/esc/conda-zsh-completion/archive/master.zip"
+  end
 
   keg_only :versioned_formula
   bottle :unneeded
@@ -33,6 +36,7 @@ class ZshBundle < Formula
     (prefix/"custom/plugins/zsh-completions").install resource("zsh-completions")
     (prefix/"custom/plugins/zsh-syntax-highlighting").install resource("zsh-syntax-highlighting")
     (prefix/"custom/plugins/zsh-blade").install resource("zsh-blade")
+    (prefix/"custom/plugins/conda-zsh-completion").install resource("conda-zsh-completion")
 
     ln_sf "#{prefix}/custom/themes/spaceship-prompt/spaceship.zsh-theme", "#{prefix}/custom/themes/spaceship.zsh-theme"
   end
@@ -45,7 +49,7 @@ class ZshBundle < Formula
     DISABLE_AUTO_UPDATE=true
     ZSH_DISABLE_COMPFIX=true
     plugins=(z git pip history extract git-auto-fetch golang systemadmin common-aliases
-      zsh-blade zsh-completions zsh-autosuggestions zsh-syntax-highlighting)
+      zsh-blade zsh-completions zsh-autosuggestions zsh-syntax-highlighting conda-zsh-completion)
     source ${ZSH}/oh-my-zsh.sh
     autoload -U compinit && compinit -u
     EOS
