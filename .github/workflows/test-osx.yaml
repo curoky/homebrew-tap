@@ -28,6 +28,7 @@ jobs:
           - hexo
           - include-what-you-use@15
           - libevent-openssl1.0
+          - libiberty
           - llvm-latest
           # - miniconda         # Note: linux only, osx has cask one
           # - ncurses@5         # Note: linux only
