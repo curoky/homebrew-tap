@@ -73,3 +73,5 @@ jobs:
       - uses: curoky/actions/brew-tap-install-test@master
         with:
           formula: ${{ matrix.package }}
+          install_args: '--include-test --verbose' # --build-from-source
+          test_args: --verbose
