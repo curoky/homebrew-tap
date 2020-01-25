@@ -33,6 +33,7 @@ jobs:
           # - oracle-jdk        # Note: linux only, osx has cask one
           - python@2
           # - qt@5.13.2         # Note: linux only
+          - terminalizer
           # - thrift@0.9.3      # Note: Error: libcrypto required.
           - typora-bundle
           - vim-bundle

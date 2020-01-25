@@ -33,6 +33,7 @@ jobs:
           - oracle-jdk
           - python@2
           - qt@5.13.2
+          - terminalizer
           - thrift@0.9.3
           - typora-bundle
           - vim-bundle
