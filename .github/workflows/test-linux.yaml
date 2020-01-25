@@ -28,8 +28,7 @@ jobs:
           - openssl@1.0.2t
           - openssl@1.0.2u
           - oracle-jdk
-          - python@2_linux
-          # - python@2_osx        # Note: osx only
+          - python@2
           - qt@5.13.2
           - thrift@0.9.3
           - typora-bundle

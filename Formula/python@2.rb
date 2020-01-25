@@ -2,18 +2,19 @@
 # https://github.com/Homebrew/linuxbrew-core/commit/8f8f34572def3b707dd1d400bdad04709a32cff6#diff-e10cba5c137d2afef5935658363f2e15
 # https://github.com/Homebrew/linuxbrew-core/commits/master?branch=master&path%5B%5D=Formula&path%5B%5D=python@2.rb
 
-class PythonAT2Linux < Formula
+class PythonAT2 < Formula
   desc "Interpreted, interactive, object-oriented programming language"
   homepage "https://www.python.org/"
   url "https://www.python.org/ftp/python/2.7.17/Python-2.7.17.tar.xz"
   sha256 "4d43f033cdbd0aa7b7023c81b0e986fd11e653b5248dac9144d508f11812ba41"
-  revision 1
+  revision 1 if OS.linux?
   head "https://github.com/python/cpython.git", :branch => "2.7"
 
   bottle do
-    sha256 "accfaa922708f00afb69ab230199f96e6ecdddd248a1eca586ce1e5e5cfd732b" => :catalina
-    sha256 "54d3351d6be8268b2f5017894dcc8e083811dfa3812bdb9f79f989873b9a4542" => :mojave
-    sha256 "cfd5c6eeac37065d19f527bb0798a9caf1928bab3340cd545224861a3c82f219" => :high_sierra
+    root_url "https://github.com/curoky/homebrew-tap/raw/archive/bottle/mirror/python@2"
+    sha256 "02fe8d8230baeffb31732225db94836a2882f08ac8effdb199c6be2cddcd2060" => :catalina
+    # sha256 "54d3351d6be8268b2f5017894dcc8e083811dfa3812bdb9f79f989873b9a4542" => :mojave
+    # sha256 "cfd5c6eeac37065d19f527bb0798a9caf1928bab3340cd545224861a3c82f219" => :high_sierra
     sha256 "32943c96a351127afbc510cd426b9e8e38b15d1af355dec604af6bcaaf099d0e" => :x86_64_linux
   end
 
@@ -28,6 +29,8 @@ class PythonAT2Linux < Formula
     satisfy { !OS.mac? || MacOS::CLT.installed? }
   end
 
+  keg_only :versioned_formula
+
   depends_on "pkg-config" => :build
   depends_on "gdbm"
   depends_on "openssl@1.1"
@@ -39,6 +42,9 @@ class PythonAT2Linux < Formula
     depends_on "ncurses"
     depends_on "zlib"
   end
+
+  depends_on "unzip" => :test
+  depends_on "xz" => :test
 
   resource "setuptools" do
     url "https://files.pythonhosted.org/packages/f4/d5/a6c19dcbcbc267aca376558797f036d9bcdff344c9f785fe7d0fe9a5f2a7/setuptools-41.4.0.zip"
