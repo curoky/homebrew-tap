@@ -70,3 +70,14 @@ jobs:
       - uses: curoky/actions/brew-tap-install-test@master
         with:
           formula: ${{ matrix.package }}
+          install_args: "--include-test --build-from-source"
+
+      - name: remove package
+        run: brew remove ${{ matrix.package }}
+
+      - name: test bottle
+        uses: curoky/actions/brew-tap-install-test@master
+        if: env.ignore != 'true'
+        with:
+          formula: ${{ matrix.package }}
+          install_args: "--include-test"
