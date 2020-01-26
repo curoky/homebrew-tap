@@ -19,7 +19,6 @@ jobs:
           # - cmake-format
           - flamegraph@2
           - cpplint
-          - gdb@10
           - git-mv-with-history
           - glibc2.32
           - hexo
