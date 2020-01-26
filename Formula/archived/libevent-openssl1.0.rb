@@ -15,7 +15,7 @@ class LibeventOpenssl10 < Formula
   depends_on "cmake" => :build
   depends_on "ninja" => :build
   depends_on "openssl@1.0.2t"
-  depends_on "gcc@10"
+  depends_on "gcc" => :build
 
   def install
     args = std_cmake_args + %W[
