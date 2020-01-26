@@ -14,7 +14,8 @@ jobs:
           - bazel@3
           - bazel-buildtools
           - bazel-compilation-database
-          # - cmake-format        # Note: not completed
+          # - cmake-format
+          - flamegraph@2
           - cpplint
           - gdb@10
           - git-mv-with-history
