@@ -16,7 +16,8 @@ class NcursesTermlib < Formula
   depends_on "ncurses"
   depends_on "pkg-config" => :build
   depends_on "gpatch" => :build unless OS.mac?
-  depends_on "gcc@10"
+  depends_on "gcc" => :build
+  depends_on "xz"
 
   def install
     system "./configure", "--prefix=#{prefix}",

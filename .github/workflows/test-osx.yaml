@@ -96,7 +96,7 @@ jobs:
       - name: link tap
         run: |
           mkdir -p $(brew --repo)/Library/Taps/curoky
-          cp -r $PWD $(brew --repo)/Library/Taps/curoky/homebrew-custom
+          cp -r $PWD $(brew --repo)/Library/Taps/curoky/homebrew-tap
 
       - name: install cask
-        run: brew cask install freefilesync
+        run: brew install freefilesync --cask
