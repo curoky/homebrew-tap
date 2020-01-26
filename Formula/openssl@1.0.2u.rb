@@ -15,7 +15,8 @@ class OpensslAT102u < Formula
   end
 
   depends_on :linux
-  depends_on "gcc@10"
+  depends_on "gcc" => :build
+  depends_on "xz"
 
   def install
     ENV["CC"] = Formula["gcc"].opt_bin/"gcc-10"

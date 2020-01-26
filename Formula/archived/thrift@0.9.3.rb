@@ -16,7 +16,7 @@ class ThriftAT093 < Formula
   depends_on "zlib"
   depends_on "openssl@1.0.2t" unless OS.mac?
   depends_on "libevent-openssl1.0" unless OS.mac?
-  depends_on "gcc@10"
+  depends_on "gcc" => [:build, :test]
 
   def install
     unless OS.mac?
