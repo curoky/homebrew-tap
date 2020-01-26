@@ -9,7 +9,8 @@ class OpensslAT102u < Formula
 
   keg_only :versioned_formula
   depends_on :linux
-  depends_on "gcc@10"
+  depends_on "gcc" => :build
+  depends_on "xz"
 
   def install
     # OpenSSL will prefer the PERL environment variable if set over $PATH

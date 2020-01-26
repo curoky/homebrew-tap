@@ -23,7 +23,7 @@ jobs:
           - include-what-you-use@15
           - libevent-openssl1.0
           - libiberty
-          - llvm-latest
+          # - llvm-latest
           - miniconda
           - ncurses@5
           - ncurses-termlib
@@ -49,6 +49,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: prepare deps
+        if: ${{ matrix.os == 'ubuntu16.04' }}
+        run: |
+          sudo apt update
+          sudo apt install libisl-dev
+          sudo ln -s /usr/lib/x86_64-linux-gnu/libisl.so /usr/lib/x86_64-linux-gnu/libisl.so.22
 
       - name: homebrew cache
         uses: actions/cache@v2
