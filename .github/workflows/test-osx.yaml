@@ -18,10 +18,9 @@ jobs:
           - bazel-compilation-database
           # - cmake-format
           - flamegraph@2
-          - cpplint
+          - folly@2021.02.15
           - git-mv-with-history
           # - glibc2.32         # Note: linux only
-          - hexo
           - include-what-you-use@15
           - libevent-openssl1.0
           - libiberty
