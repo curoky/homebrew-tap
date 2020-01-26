@@ -1,0 +1,70 @@
+name: build {{ name }}
+on:
+  push:
+    paths:
+      - 'Formula/src/formula/{{ name }}.rb'
+      - '.github/workflows/build-{{ name }}.yaml'
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['homebrew/ubuntu16.04', 'curoky/homebrew:ubuntu21.04']
+
+    runs-on: ubuntu-latest # macos-latest
+    container:
+      image: {{ '${{ matrix.os }}' }}
+
+    env:
+      HOMEBREW_NO_ANALYTICS: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: link formula
+        run: >
+          cp -L
+          Formula/*.rb
+          $(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/
+
+      - name: check if the platform supports
+        run: |
+          Formula=$(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-core/Formula
+          if grep -q "depends_on :macos" $Formula/{{ name }}.rb; then
+            if [[ "$(uname -s)" == "Linux" ]]; then
+              echo "ignore=true" >> $GITHUB_ENV
+            fi
+          fi
+          if grep -q "depends_on :linux" $Formula/{{ name }}.rb; then
+              if [[ "$(uname -s)" == "Darwin" ]]; then
+              echo "ignore=true" >> $GITHUB_ENV
+            fi
+          fi
+          if grep -q "bottle" $Formula/{{ name }}.rb; then
+              if [[ "$(uname -s)" == "Linux" ]]; then
+              echo "have_bottle=true" >> $GITHUB_ENV
+            fi
+          fi
+
+
+      - name: install
+        if: env.ignore != 'true'
+        run: brew install --verbose --include-test --build-from-source {{ name }}
+
+      - name: test
+        if: env.ignore != 'true'
+        run: brew test --verbose {{ name }}
+
+      - name: remove package
+        if: env.ignore != 'true'
+        run: brew remove {{ name }}
+
+      - name: install
+        if: env.ignore != 'true' && env.have_bottle == 'true'
+        run: brew install --verbose --include-test {{ name }}
+
+      - name: test
+        if: env.ignore != 'true' && env.have_bottle == 'true'
+        run: brew test --verbose {{ name }}
