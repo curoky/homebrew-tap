@@ -18,6 +18,7 @@ jobs:
           - bazel-compilation-database
           # - cmake-format      # Note: not completed
           - cpplint
+          # - gdb@10            # Note: linux only
           - git-mv-with-history
           # - glibc2.32         # Note: linux only
           - hexo
