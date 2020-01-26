@@ -23,10 +23,10 @@ jobs:
           - bazel-compilation-database
           # - cmake-format
           - flamegraph@2
-          - cpplint
+          - folly@2021.02.15
+          - gflags@2.2.2
           - git-mv-with-history
           - glibc2.32
-          - hexo
           - include-what-you-use@15
           - libevent-openssl1.0
           - libiberty
