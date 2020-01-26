@@ -13,6 +13,7 @@ jobs:
         os: [ubuntu16.04, ubuntu20.04] # ubuntu18.04,
         package:
           # ls Formula | xargs -n 1 | sed -e 's/.rb/ /' -e 's/^/          - /'
+          - apfs-fuse
           - bazel@3
           - bazel-buildtools
           - bazel-compilation-database
