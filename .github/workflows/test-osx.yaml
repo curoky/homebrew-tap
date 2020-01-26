@@ -23,6 +23,7 @@ jobs:
           # - glibc2.32         # Note: linux only
           - include-what-you-use@15
           - libevent-openssl1.0
+          # - libfuse@3         # Note: linux only
           - libiberty
           - llvm-latest
           # - miniconda         # Note: linux only, osx has cask one
