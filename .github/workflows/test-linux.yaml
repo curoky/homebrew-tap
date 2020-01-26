@@ -29,6 +29,7 @@ jobs:
           - glibc2.32
           - include-what-you-use@15
           - libevent-openssl1.0
+          - libfuse@3
           - libiberty
           # - llvm-latest
           - miniconda
