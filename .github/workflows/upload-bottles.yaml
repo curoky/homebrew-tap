@@ -1,0 +1,93 @@
+name: upload-bottles
+
+on:
+  workflow_dispatch:
+  # push:
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      max-parallel: 100
+      matrix:
+        package:
+          # - apfs-fuse
+          # - boost@1.57.0
+          # - boost@1.60.0
+          # - boost@1.72.0
+          # - chkservice
+          # - fbthrift@2021.02.15
+          # - fizz@2021.02.15
+          # - folly@2021.02.15
+          # - gflags@2.2.2
+          # - glibc@2.32
+          # - libiberty
+          # - openssl@1.0.2t
+          # - openssl@1.0.2u
+          # - ncurses@5
+          # - python@2
+          # - qt@5.13.2
+          # - wangle@2021.02.15
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: homebrew/ubuntu16.04
+
+    env:
+      HOMEBREW_NO_ANALYTICS: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: tap repo
+        run: |
+          mkdir -p $(brew --repo)/Library/Taps/curoky
+          cp -r ../homebrew-tap $(brew --repo)/Library/Taps/curoky/
+          ls -la $(brew --repo)/Library/Taps/curoky/
+          ls -la $(brew --repo)/Library/Taps/curoky/homebrew-tap
+          ls -la $(brew --repo)/Library/Taps/curoky/homebrew-tap/Formula
+
+      # https://github.com/Homebrew/brew/issues/4740
+      - name: build bottle
+        run: |
+          brew install jq
+          brew install --build-bottle curoky/tap/${{ matrix.package }}
+          brew bottle curoky/tap/${{ matrix.package }} --json
+          filename=$(jq '.[].bottle.tags.x86_64_linux.filename' *.json | sed 's/"//g' | sed 's/%40/@/g')
+          local_filename=$(jq '.[].bottle.tags.x86_64_linux.local_filename' *.json | sed 's/"//g')
+          sha256=$(jq '.[].bottle.tags.x86_64_linux.sha256' *.json | sed 's/"//g')
+          echo "filename=$filename"
+          echo "local_filename=$local_filename"
+          echo "sha256=$sha256"
+          echo "filename=$filename" >> $GITHUB_ENV
+          echo "local_filename=$local_filename" >> $GITHUB_ENV
+          echo "sha256=$sha256" >> $GITHUB_ENV
+          escaped_reponame=$(echo '${{ github.repository }}' | sed 's/-/\\-/g' | sed 's/_/\\_/g' | sed 's/\./\\./g')
+          escaped_filename=$(echo "$filename" | sed 's/-/\\-/g' | sed 's/_/\\_/g' | sed 's/\./\\./g')
+          echo "escaped_reponame=$escaped_reponame"
+          echo "escaped_filename=$escaped_filename"
+          echo "escaped_reponame=$escaped_reponame" >> $GITHUB_ENV
+          echo "escaped_filename=$escaped_filename" >> $GITHUB_ENV
+
+      - name: update bottle to release
+        uses: svenstaro/upload-release-action@2.2.1
+        with:
+          repo_token: ${{ secrets.GH_UPLOAD_KEY }}
+          file: ${{ env.local_filename }}
+          asset_name: ${{ env.filename }}
+          tag: bottles
+          overwrite: true
+          body: 'homebrew bottles'
+
+      - name: send sha256 message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: 'MarkdownV2'
+          message: |
+            * ${{ env.escaped_reponame }} *
+            publish: *${{ env.escaped_filename }}*
+            sha256: `${{ env.sha256 }}`
