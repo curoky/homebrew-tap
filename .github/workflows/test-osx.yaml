@@ -76,4 +76,4 @@ jobs:
           cp -r $PWD $(brew --repo)/Library/Taps/curoky/homebrew-tap
 
       - name: install cask
-        run: brew install freefilesync --cask
+        run: brew install freefilesync curoky/tap/squirrel --cask
