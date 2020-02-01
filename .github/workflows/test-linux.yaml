@@ -15,7 +15,8 @@ jobs:
           - bazel@3
           - bazel-buildtools
           - bazel-compilation-database
-          # - cmake-format
+          - chkservice
+          - cmake-format
           - flamegraph@2
           - git-mv-with-history
           - glibc2.32
