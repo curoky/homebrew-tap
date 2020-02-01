@@ -28,23 +28,18 @@ jobs:
           - folly@2021.02.15
           - git-mv-with-history
           - glibc2.32
-          - include-what-you-use@15
-          - libevent-openssl1.0
-          - libfuse@3
+          # - include-what-you-use@15
           - libiberty
-          # - llvm-latest
-          - miniconda
           - ncurses@5
-          - ncurses-termlib
           - openssl@1.0.2t
           - openssl@1.0.2u
-          - oracle-jdk
           - python@2
           - qt@5.13.2
+          - rime-bundle
           - terminalizer
-          - thrift@0.9.3
           - typora-bundle
           - vim-bundle
+          - wangle@2021.02.15
           - zsh-bundle
 
     runs-on: ubuntu-latest
@@ -59,14 +54,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: prepare deps
-        if: ${{ matrix.os == 'ubuntu16.04' }}
+      - name: check if the platform supports
         run: |
-          sudo apt update
-          sudo apt install libisl-dev
-          sudo ln -s /usr/lib/x86_64-linux-gnu/libisl.so /usr/lib/x86_64-linux-gnu/libisl.so.22
+          if grep -q "depends_on :macos" ./Formula/${{ matrix.package }}.rb; then
+            echo "ignore=true" >> $GITHUB_ENV
+          fi
 
-      - uses: curoky/actions/brew-tap-install-test@master
+      - name: test source
+        uses: curoky/actions/brew-tap-install-test@master
+        if: env.ignore != 'true'
         with:
           formula: ${{ matrix.package }}
           install_args: "--include-test --build-from-source"
