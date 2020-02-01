@@ -11,29 +11,31 @@ jobs:
         os: [macos-latest]
         package:
           # ls Formula | xargs -n 1 | sed -e 's/.rb/ /' -e 's/^/          - /'
-          # - bazel@3           # Note: linux only
-          # - bazel-buildtools  # Note: linux only
+          # - apfs-fuse
+          - bazel@3
+          - bazel-buildtools
           - bazel-compilation-database
-          # - chkservice        # Note: linux only
+          - chkservice
           - cmake-format
           - flamegraph@2
           - git-mv-with-history
-          # - glibc2.32         # Note: linux only
+          # - glibc2.32
           - include-what-you-use@15
-          - libevent-openssl1.0
-          # - libfuse@3         # Note: linux only
-          - libiberty
-          - llvm-latest
-          # - miniconda         # Note: linux only, osx has cask one
-          # - ncurses@5         # Note: linux only
-          # - ncurses-termlib   # Note: linux only
-          - openssl@1.0.2t
-          # - openssl@1.0.2u    # Note: linux only
-          # - oracle-jdk        # Note: linux only, osx has cask one
+          # - libevent-openssl1.0
+          # - libfuse@3
+          # - libiberty
+          # - llvm-latest
+          # - miniconda
+          # - ncurses@5
+          # - ncurses-termlib
+          # - openssl@1.0.2t
+          # - openssl@1.0.2u
+          # - oracle-jdk
           - python@2
-          # - qt@5.13.2         # Note: linux only
+          - qt@5.13.2
+          - rime-bundle
           - terminalizer
-          # - thrift@0.9.3      # Note: Error: libcrypto required.
+          # - thrift@0.9.3
           - typora-bundle
           - vim-bundle
           - zsh-bundle
@@ -47,16 +49,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: unlink preinstall nodejs
-        run: echo node@12 python@3.8 | xargs -n 1 brew unlink || echo "ignore Failed"
-
-      - name: remove openssl@1.0.2t in local tap
-        run: rm -rf $(brew --repo)/Library/Taps/local
+      - name: check if the platform supports
+        run: |
+          if grep -q "depends_on :linux" ./Formula/${{ matrix.package }}.rb; then
+            echo "ignore=true" >> $GITHUB_ENV
+          fi
 
       - uses: curoky/actions/brew-tap-install-test@master
+        if: env.ignore != 'true'
         with:
           formula: ${{ matrix.package }}
-          install_args: "--include-test"
+          install_args: '--include-test'
 
   install_cask:
     runs-on: macos-latest
