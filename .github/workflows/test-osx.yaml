@@ -18,30 +18,28 @@ jobs:
         os: [macos-latest]
         package:
           # ls Formula | xargs -n 1 | sed -e 's/.rb/ /' -e 's/^/          - /'
-          # - bazel@3           # Note: linux only
-          # - bazel-buildtools  # Note: linux only
+          - apfs-fuse
           - bazel-compilation-database
-          # - chkservice        # Note: linux only
+          - bazel
+          - boost@1.57.0
+          - boost@1.60.0
+          - boost@1.72.0
           - cmake-format
           - fbthrift@2021.02.15
           - fizz@2021.02.15
           - flamegraph
           - folly@2021.02.15
+          - gflags@2.2.2
           - git-mv-with-history
           - glibc@2.32
           - libiberty
-          - llvm-latest
-          # - miniconda         # Note: linux only, osx has cask one
-          # - ncurses@5         # Note: linux only
-          # - ncurses-termlib   # Note: linux only
+          - ncurses@5
           - openssl@1.0.2t
-          # - openssl@1.0.2u    # Note: linux only
-          # - oracle-jdk        # Note: linux only, osx has cask one
+          - openssl@1.0.2u
           - python@2
-          # - qt@5.13.2         # Note: linux only
+          - qt@5.13.2
+          - rime-bundle
           - terminalizer
-          # - thrift@0.9.3      # Note: Error: libcrypto required.
-          - typora-bundle
           - vim-bundle
           - wangle@2021.02.15
           - zsh-bundle
@@ -55,30 +53,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: unlink preinstall nodejs
-        run: echo node@12 python@3.8 | xargs -n 1 brew unlink || echo "ignore Failed"
+      - name: check if the platform supports
+        run: |
+          if grep -q "depends_on :linux" ./Formula/${{ matrix.package }}.rb; then
+            echo "ignore=true" >> $GITHUB_ENV
+          fi
 
-      - name: remove openssl@1.0.2t in local tap
-        run: rm -rf $(brew --repo)/Library/Taps/local
-
-      - uses: curoky/actions/brew-tap-install-test@master
+      - uses: ./src/actions
+        if: env.ignore != 'true'
         with:
           formula: ${{ matrix.package }}
-          install_args: "--include-test"
-
-  install_cask:
-    runs-on: macos-latest
-    env:
-      HOMEBREW_NO_ANALYTICS: 1
-      HOMEBREW_NO_AUTO_UPDATE: 1
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: link tap
-        run: |
-          mkdir -p $(brew --repo)/Library/Taps/curoky
-          cp -r $PWD $(brew --repo)/Library/Taps/curoky/homebrew-tap
-
-      - name: install cask
-        run: brew install freefilesync --cask
+          install_args: '--include-test --verbose'
+          test_args: --verbose
