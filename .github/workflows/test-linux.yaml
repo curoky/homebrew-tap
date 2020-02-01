@@ -20,8 +20,14 @@ jobs:
           # ls Formula | xargs -n 1 | sed -e 's/.rb/ /' -e 's/^/          - /'
           - apfs-fuse
           - bazel-compilation-database
-          # - cmake-format
-          - flamegraph@2
+          - bazel
+          - boost@1.57.0
+          - boost@1.60.0
+          - boost@1.72.0
+          - cmake-format
+          - fbthrift@2021.02.15
+          - fizz@2021.02.15
+          - flamegraph
           - folly@2021.02.15
           - gflags@2.2.2
           - git-mv-with-history
