@@ -1,0 +1,36 @@
+name: build fbthriftc
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/build-fbthriftc.yaml'
+      - 'Formula/fbthriftc.rb'
+      - 'src/actions/action.yaml'
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        version:
+          - '2019.06.03'
+          - '2019.12.30'
+          - '2020.12.14'
+          - '2021.03.01'
+          - '2021.06.07'
+
+    runs-on: ubuntu-latest
+    container:
+      image: homebrew/ubuntu20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./src/actions
+        with:
+          formula: fbthriftc
+          install_args: --verbose --build-from-source
+          test_args: --verbose
+          env: 'HOMEBREW_FBTHRIFTC_VERSION=${{ matrix.version }}'
+          ggg: ${{ secrets.GITHUB_TOKEN }}
+          upload_filepath: /home/linuxbrew/.linuxbrew/opt/fbthriftc/bin/thrift1
+          upload_filename: fbthriftc-${{ matrix.version }}

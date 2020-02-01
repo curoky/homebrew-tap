@@ -1,0 +1,80 @@
+name: test on osx
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/test-osx.yaml'
+      - 'Formula/**'
+      - 'src/lib/**'
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      max-parallel: 100
+      matrix:
+        os: [macos-latest]
+        package:
+          # ls Formula | xargs -n 1 | sed -e 's/.rb/ /' -e 's/^/          - /'
+          - apfs-fuse
+          - azure-functions-core-tools@3
+          - bazel-compilation-database
+          - bazel
+          - boost@1.57.0
+          - boost@1.60.0
+          - boost@1.72.0
+          - boost-python@1.72.0
+          - fbthrift@2021.02.15
+          # - fbthriftc
+          - fizz@2021.02.15
+          - flamegraph
+          - folly@2021.02.15
+          - formatter-bundle
+          - gflags@2.2.2
+          - git-mv-with-history
+          - glog@0.5.0
+          - include-what-you-use@16
+          - jemalloc-prof
+          - libiberty
+          - libunwind
+          # - llvm-tools
+          - ncurses@5
+          - ncurses-termlib
+          - openssl@1.0.2t
+          - openssl@1.0.2u
+          # - protoc
+          - python@2
+          - qt@5.13.2
+          - rime-bundle
+          - terminalizer
+          # - thriftc
+          # - tmux
+          - vim-bundle
+          - wangle@2021.02.15
+          # - xz
+          - zsh-bundle
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+      HOMEBREW_NO_ANALYTICS: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: check if the platform supports
+        run: |
+          if grep -q "depends_on :linux" ./Formula/${{ matrix.package }}.rb; then
+            echo "ignore=true" >> $GITHUB_ENV
+          fi
+
+      - uses: ./src/actions
+        if: env.ignore != 'true'
+        with:
+          formula: ${{ matrix.package }}
+          install_args: '--include-test --verbose'
+          test_args: --verbose
+          update_brew: 'true'

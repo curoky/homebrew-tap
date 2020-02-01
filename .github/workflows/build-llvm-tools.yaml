@@ -1,0 +1,45 @@
+name: build llvm tools
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/build-llvm-tools.yaml'
+      - 'Formula/llvm-tools.rb'
+      - 'src/actions/action.yaml'
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        version:
+          - '3.9.1'
+          - '4.0.1'
+          - '5.0.2'
+          - '6.0.1'
+          - '7.1.0'
+          - '8.0.1'
+          - '9.0.1'
+          - '10.0.1'
+          - '11.0.0'
+          - '12.0.1'
+
+    runs-on: ubuntu-latest
+    container:
+      image: homebrew/ubuntu20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      # FIXME:
+      - run: brew install ncurses && brew unlink ncurses
+
+      - uses: ./src/actions
+        with:
+          formula: llvm-tools
+          install_args: --verbose --build-from-source
+          test_args: --verbose
+          env: 'HOMEBREW_LLVMTOOLS_VERSION=${{ matrix.version }}'
+          ggg: ${{ secrets.GITHUB_TOKEN }}
+          upload_filepath: /home/linuxbrew/.linuxbrew/opt/llvm-tools/bin/clang-format
+          upload_filename: clang-format-${{ matrix.version }}
