@@ -68,22 +68,6 @@ jobs:
           sudo apt install libisl-dev
           sudo ln -s /usr/lib/x86_64-linux-gnu/libisl.so /usr/lib/x86_64-linux-gnu/libisl.so.22
 
-      - name: homebrew cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/Homebrew
-          key: ${{ matrix.package }}-${{ hashFiles(format('Formula/{0}.rb', matrix.package)) }}
-          restore-keys: |
-            ${{ matrix.package }}-
-
-      - name: check cache
-        run: |
-          mkdir -p ~/.cache/Homebrew || echo "ignore exits"
-          ls -la $(brew --cache)
-
-      - name: upgrade homebrew
-        run: brew update && brew upgrade || echo "ignore failed"
-
       - uses: curoky/actions/brew-tap-install-test@master
         with:
           formula: ${{ matrix.package }}
