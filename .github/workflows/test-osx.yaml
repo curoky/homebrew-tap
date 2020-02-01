@@ -16,7 +16,10 @@ jobs:
           # - bazel@3           # Note: linux only
           # - bazel-buildtools  # Note: linux only
           - bazel-compilation-database
-          # - cmake-format
+          # - chkservice        # Note: linux only
+          - cmake-format
+          - fbthrift@2021.02.15
+          - fizz@2021.02.15
           - flamegraph@2
           - folly@2021.02.15
           - git-mv-with-history

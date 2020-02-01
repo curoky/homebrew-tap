@@ -17,7 +17,13 @@ jobs:
           - bazel@3
           - bazel-buildtools
           - bazel-compilation-database
-          # - cmake-format
+          # - boost@1.57.0
+          - boost@1.60.0
+          - boost@1.72.0
+          - chkservice
+          - cmake-format
+          - fbthrift@2021.02.15
+          - fizz@2021.02.15
           - flamegraph@2
           - folly@2021.02.15
           - git-mv-with-history
