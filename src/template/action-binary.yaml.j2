@@ -1,0 +1,50 @@
+{% import 'template/utils.j2' as utils %}
+{% call utils.autogen() %} {% endcall %}
+
+name: build {{ name }}
+on:
+  push:
+    paths:
+      - 'Formula/{{ name }}@*'
+      - '.github/workflows/build-{{ name }}.yaml'
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        os: [ubuntu20.04]
+        version:
+{% for v in versions %}
+          - '{{ v }}'
+{% endfor %}
+
+    runs-on: ubuntu-latest
+    container:
+      image: {{ 'homebrew/${{ matrix.os }}' }}
+
+    env:
+      HOMEBREW_NO_ANALYTICS: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: link formula
+        run: >
+          cp -L
+          $PWD/Formula/*.rb
+          $(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/
+      - run: brew install --verbose --build-from-source {{ name }}@{{ '${{ matrix.version }}' }}
+      - run: brew test --verbose {{ name }}@{{ '${{ matrix.version }}' }}
+
+{% for bin in bins %}
+      - name: update binary to release
+        uses: svenstaro/upload-release-action@2.2.1
+        with:
+          tag: binary
+          overwrite: true
+          file: /home/linuxbrew/.linuxbrew/opt/{{ name }}@{{ '${{ matrix.version }}' }}/bin/{{ bin }}
+          asset_name: {{ bin }}-{{ '${{ matrix.version }}' }}
+          repo_token: {{ '${{ secrets.GH_UPLOAD_KEY }}' }}
+{% endfor %}
