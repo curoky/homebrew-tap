@@ -1,0 +1,37 @@
+name: build tmux
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/build-tmux.yaml'
+      - 'Formula/tmux.rb'
+      - 'src/actions/action.yaml'
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        version:
+          - '3.2'
+          - '3.1c'
+          - '3.0a'
+          - '2.9a'
+          - '2.8'
+          - '2.7'
+          - '2.6'
+          - '2.5'
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./src/actions
+        with:
+          formula: tmux
+          install_args: --verbose --build-from-source
+          test_args: --verbose
+          env: 'HOMEBREW_TMUX_VERSION=${{ matrix.version }}'
+          ggg: ${{ secrets.GH_UPLOAD_KEY }}
+          upload_filepath: /home/linuxbrew/.linuxbrew/opt/tmux/bin/tmux
+          upload_filename: tmux-${{ matrix.version }}

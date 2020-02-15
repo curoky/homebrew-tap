@@ -1,0 +1,44 @@
+name: build xz
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/build-xz.yaml'
+      - 'Formula/xz.rb'
+      - 'src/actions/action.yaml'
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        version:
+          - '5.2.5'
+          - '5.2.4'
+          - '5.2.3'
+          - '5.2.2'
+          - '5.2.1'
+          - '5.2.0'
+          - '5.0.8'
+          - '5.0.7'
+          - '5.0.6'
+          - '5.0.5'
+          - '5.0.4'
+          - '5.0.3'
+          - '5.0.2'
+          - '5.0.1'
+          - '5.0.0'
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./src/actions
+        with:
+          formula: xz
+          install_args: --verbose --build-from-source
+          test_args: --verbose
+          env: 'HOMEBREW_XZ_VERSION=${{ matrix.version }}'
+          ggg: ${{ secrets.GH_UPLOAD_KEY }}
+          upload_filepath: /home/linuxbrew/.linuxbrew/opt/xz/bin/xz
+          upload_filename: xz-${{ matrix.version }}
